@@ -15,6 +15,7 @@
     "class-validator": "^0.13.2",
     "dotenv": "^16.0.1",
     "nodemon": "^2.0.19",
+    "say": "^0.16.0",
     "tmi.js": "^1.8.5",
     "websocket": "^1.0.34"
   }

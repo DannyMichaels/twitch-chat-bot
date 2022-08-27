@@ -3,8 +3,8 @@ const {
   NoTwitchResponseError,
   TwitchResponseError,
 } = require('./Error');
-
 const TwitchTokenResponseValidator = require('./TwitchTokenResponseValidator');
+const say = require('say');
 
 class TwitchChatBot {
   tmi = require('tmi.js');
@@ -77,10 +77,17 @@ class TwitchChatBot {
       const restOfMessage = array.join(' ');
 
       // Ignore messages from itself.
-      if (self) return;
+      if (self) {
+        return console.log('ERR:: Bot will ignore messages from itself!');
+      }
 
       if (command.startsWith('!')) {
         switch (command) {
+          case '!say': {
+            this.textToSpeech(tags, restOfMessage);
+            break;
+          }
+
           case '!hello': {
             this.sayHelloToUser(channel, tags);
             break;
@@ -89,11 +96,22 @@ class TwitchChatBot {
             this.repeatMessage(channel, restOfMessage);
             break;
           }
+          case '!reverse': {
+            this.repeatMessage(
+              channel,
+              restOfMessage.split('').reverse().join('')
+            );
+            break;
+          }
           default:
             break;
         }
       }
     });
+  }
+
+  textToSpeech({ username }, message) {
+    say.speak(`${username} says ${message}`);
   }
 
   sayHelloToUser(channel, tags) {
@@ -120,7 +138,7 @@ class TwitchChatBot {
       },
       identity: {
         username: `${username}`,
-        password: `oauth:${accessToken}`,
+        password: `oauth:${accessToken}`, // https://twitchapps.com/tmi to get accessCode
       },
       channels: [`${channel}`],
     };

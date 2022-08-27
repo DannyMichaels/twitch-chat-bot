@@ -14,4 +14,5 @@ module.exports = {
 /* 
 How to get authorization_code:
 https://id.twitch.tv/oauth2/authorize?client_id=<client_id>&redirect_uri=http://localhost&response_type=code&scope=chat:read chat:edit
+OR https://twitchapps.com/tmi
 */
