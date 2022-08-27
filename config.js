@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 module.exports = {
+  port: 8000,
   twitch: {
     token_endpoint: 'https://id.twitch.tv/oauth2/token',
     username: process.env.TWITCH_BOT_USERNAME,
@@ -8,6 +9,7 @@ module.exports = {
     client_secret: process.env.TWITCH_BOT_CLIENT_SECRET,
     authorization_code: process.env.TWITCH_BOT_AUTHORIZATION_CODE,
     channel: process.env.TWITCH_BOT_CHANNEL_NAME,
+    redirect_uri: process.env.TWITCH_REDIRECT_URI,
   },
 };
 

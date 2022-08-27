@@ -17,8 +17,8 @@ class TwitchChatBot {
 
   constructor() {}
 
-  async launch() {
-    this.tokenDetails = await this.fetchAccessToken();
+  async launch(authorization_code) {
+    this.tokenDetails = await this.fetchAccessToken(authorization_code);
     this.twitchClient = new this.tmi.Client(
       this.buildConnectionConfig(
         this.config.channel,
@@ -30,7 +30,7 @@ class TwitchChatBot {
     this.twitchClient.connect();
   }
 
-  async fetchAccessToken() {
+  async fetchAccessToken(authorization_code) {
     const axios = require('axios');
     console.log('Fetching Twitch OAuth Token');
     return axios({
@@ -40,9 +40,9 @@ class TwitchChatBot {
       params: {
         client_id: this.config.client_id,
         client_secret: this.config.client_secret,
-        code: this.config.authorization_code,
+        code: authorization_code,
         grant_type: 'authorization_code',
-        redirect_uri: 'http://localhost',
+        redirect_uri: this.config.redirect_uri,
       },
       responseType: 'json',
     })
