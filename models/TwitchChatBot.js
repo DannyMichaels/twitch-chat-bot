@@ -84,7 +84,7 @@ class TwitchChatBot {
       if (command.startsWith('!')) {
         switch (command) {
           case '!say': {
-            this.textToSpeech(tags, restOfMessage);
+            this.textToSpeech(channel, tags, restOfMessage);
             break;
           }
 
@@ -110,8 +110,12 @@ class TwitchChatBot {
     });
   }
 
-  textToSpeech({ username }, message) {
-    say.speak(`${username} says ${message}`);
+  textToSpeech(channel, { username }, message) {
+    if (!message) {
+      return this.twitchClient.say(channel, 'Error, message is empty!');
+    }
+
+    return say.speak(`${username} says ${message}`);
   }
 
   sayHelloToUser(channel, tags) {
