@@ -6,6 +6,8 @@ const {
 const TwitchTokenResponseValidator = require('./TwitchTokenResponseValidator');
 const say = require('say');
 
+// https://github.com/tmijs/docs/blob/gh-pages/_posts/v1.4.2/2019-03-03-Events.md#chat
+
 class TwitchChatBot {
   tmi = require('tmi.js');
   config = require('../config').twitch;
@@ -71,7 +73,7 @@ class TwitchChatBot {
   }
 
   setupBotBehavior() {
-    this.twitchClient.on('message', (channel, tags, message, self) => {
+    this.twitchClient.on('message', (channel, userstate, message, self) => {
       const array = message.split(' ');
       const command = array.splice(0, 1).join('');
       const restOfMessage = array.join(' ');
@@ -84,18 +86,25 @@ class TwitchChatBot {
       if (command.startsWith('!')) {
         switch (command) {
           case '!say': {
-            this.textToSpeech(channel, tags, restOfMessage);
+            this.textToSpeech(channel, userstate, restOfMessage);
+            break;
+          }
+
+          case '!tts': {
+            this.textToSpeech(channel, userstate, restOfMessage);
             break;
           }
 
           case '!hello': {
-            this.sayHelloToUser(channel, tags);
+            this.sayHelloToUser(channel, userstate);
             break;
           }
+
           case '!repeat': {
             this.repeatMessage(channel, restOfMessage);
             break;
           }
+
           case '!reverse': {
             this.repeatMessage(
               channel,
@@ -103,6 +112,7 @@ class TwitchChatBot {
             );
             break;
           }
+
           default:
             break;
         }
@@ -118,10 +128,10 @@ class TwitchChatBot {
     return say.speak(`${username} says ${message}`);
   }
 
-  sayHelloToUser(channel, tags) {
+  sayHelloToUser(channel, userState) {
     this.twitchClient.say(
       channel,
-      `Hello, ${tags.username}! Welcome to the channel.`
+      `Hello, ${userState.username}! Welcome to the channel.`
     );
   }
 
